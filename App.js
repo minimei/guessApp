@@ -7,8 +7,8 @@ export default class Game extends Component {
     secret : 0,
     input: '',
     feedback: '',
-    limit: 5,
-    turns: 1,
+    counter: 0,
+    limit: 4,
     feedback2: ''
   }
 
@@ -29,32 +29,32 @@ componentDidMount() {
 
 //update input state
 updateInput = (value) => { this.setState({ input: value }) }
-increment = () => { this.setState({turns: this.state.turns + 1})}
+decrement = () => { this.setState({limit: this.state.limit - 1})}
 
 checkGuess = () => {
 
   const userGuess = parseInt(this.state.input);
   const secretNumber = this.state.secret;
-  const guessLimit = this.state.limit;
-  const guessCount = this.state.turns;
+  const guessLimit = this.state.counter;
+  const guessCount = this.state.limit;
 
-  if( guessCount < guessLimit ){
+  if( guessCount > guessLimit ){
 
       if( userGuess < secretNumber ) {
       this.setState({ feedback: ' The number is larger than ' + userGuess })
-      this.setState({ feedback2: ' Guess ' + guessCount })
+      this.setState({ feedback2: ' You have ' + guessCount + ' guess left '})
       return
       }
 
       if( userGuess > secretNumber ){
       this.setState({ feedback: ' The number is smaller than ' + userGuess })
-      this.setState({ feedback2: ' Guess ' + guessCount })
+      this.setState({ feedback2: ' You have ' + guessCount + ' guess left'})
       return
       }
 
       if(userGuess == secretNumber){
       this.setState({ feedback: ' You guessed right, the number is ' + secretNumber})
-      this.setState({ feedback2: ' Guess ' + guessCount })
+      this.setState({ feedback2: ' You have ' + guessCount + ' guess left'})
     
       //restart the game
       this.init()
@@ -63,7 +63,7 @@ checkGuess = () => {
   }
   else{
     this.setState({ feedback: ' You run out of guesses. The correct number is ' + secretNumber })
-    this.setState({ feedback2: '' })
+    this.setState({ feedback2: ' You have ' + guessCount + ' guess left'})
      //restart the game
      this.init()
      return
@@ -85,7 +85,7 @@ render () {
       </TextInput>
       <TouchableHighlight style={styles.button}
       underlayColor = 'white'
-      onPressIn={this.increment}
+      onPressIn={this.decrement}
       onPress={this.checkGuess}>
         <Text>Submit Guess</Text>
       </TouchableHighlight>
